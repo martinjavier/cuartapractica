@@ -1,0 +1,32 @@
+<h2>LOGIN</h2>
+{{message}}
+<form method="post" action="api/sessions/login">
+  <label for="email">E-MAIL</label>
+  <input
+    type="email"
+    placeholder="email"
+    name="email"
+    style="font-size:18pt;"
+  />
+  <br />
+  <label for="password">PASSWORD</label>
+  <input
+    type="password"
+    placeholder="password"
+    name="password"
+    style="font-size:18pt;"
+  />
+  <br />
+  <button type="submit">Login</button>
+</form>
+
+<br />
+<a href="/api/sessions/github">Login with GITHUB</a>
+
+<br />
+<a href="/signup">New User? Local Signup</a>
+
+<hr />
+<a href="/forgot-password">
+  <button>Recover password</button>
+</a>

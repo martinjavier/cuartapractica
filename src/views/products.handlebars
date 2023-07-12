@@ -1,0 +1,28 @@
+<div style="background:blueviolet;color:white;padding:10px">Bienvenido
+  {{email}}</div>
+<h2>PRODUCTS</h2>
+{{#if totalDocs}}
+  Products List
+  {{#each payload}}
+    <ul>
+      <li> {{this.title}} - Price: {{this.price}}</li>
+      <a href="/product/{{this._id}}">View Details</a>
+      <button onclick="addToCart(`{{this._id}}`)">Add To Cart</button>
+    </ul>
+  {{/each}}
+  <div>
+    {{#if hasPrevPage}}
+      <a href={{prevLink}}>Prevoius</a>
+    {{/if}}
+    {{this.page}}
+    {{#if hasNextPage}}
+      <a href={{nextLink}}>Next</a>
+    {{/if}}
+  </div>
+{{else}}
+  <p>There is no products</p>
+{{/if}}
+
+<a href="/api/sessions/logout">Close Session</a>
+
+<script src="/js/products.js"></script>
