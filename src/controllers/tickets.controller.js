@@ -32,7 +32,7 @@ export const getTicketByIdController = async (req, res) => {
 export const createTicketController = async (req, res) => {
   try {
     // CREO EL TICKET
-    let ticketCreated = createTicket(req.body);
+    let ticketCreated = await createTicket(req.body);
     res.json({ status: "success", payload: ticketCreated });
   } catch (error) {
     req.logger.error(error.message);

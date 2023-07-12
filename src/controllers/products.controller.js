@@ -57,7 +57,7 @@ export const createProductController = async (req, res) => {
     }
     let product = req.body;
     product.owner = userId;
-    const productCreated = createProduct(product);
+    const productCreated = await createProduct(product);
     res.json({ status: "success", payload: productCreated });
   } catch (error) {
     res.json({ status: "error", message: error.message });

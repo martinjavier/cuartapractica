@@ -37,7 +37,7 @@ export const getCartByIdController = async (req, res) => {
 
 export const createCartController = async (req, res) => {
   try {
-    const cartCreated = createCart(req.body);
+    const cartCreated = await createCart(req.body);
     res.json({ status: "success", payload: cartCreated });
   } catch (error) {
     res.json({ status: "error", message: error.message });
