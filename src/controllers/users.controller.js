@@ -7,6 +7,7 @@ import {
   premiumUser,
   getUserRole,
 } from "../services/user.service.js";
+import { createCart } from "../services/cart.service.js";
 import { UserModel } from "../dao/factory.js";
 
 export const getUsersController = async (req, res) => {
@@ -29,7 +30,14 @@ export const getUserByIdController = async (req, res) => {
 
 export const createUserController = async (req, res) => {
   try {
-    const userCreated = await createUser(req.body);
+    const cartCreated = await createCart({
+      products: [{ id: "012345678901234567890123", quantity: 1 }],
+    });
+    const cartID = cartCreated._id;
+    const mockBody = req.body;
+    mockBody.cart = cartID;
+    const userCreated = await createUser(mockBody);
+    console.log("userCreated: " + userCreated);
     res.json({ status: "success", payload: userCreated });
   } catch (error) {
     res.json({ status: "error", message: error.message });

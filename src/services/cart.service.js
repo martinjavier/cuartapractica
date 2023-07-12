@@ -1,54 +1,53 @@
 import { CartManager } from "../dao/factory.js";
 
-export const createCart = (cart) => {
+export const createCart = async (cart) => {
   try {
-    const cartAdded = CartManager.createCart(cart);
-    console.log("Creando la CART: " + cartAdded);
+    const cartAdded = await CartManager.createCart(cart);
     return cartAdded;
   } catch (error) {
     return error.message;
   }
 };
 
-export const getCarts = () => {
+export const getCarts = async () => {
   try {
-    const carts = CartManager.getCarts();
+    const carts = await CartManager.getCarts();
     return carts;
   } catch (error) {
     return error.message;
   }
 };
 
-export const getCartById = (cartId) => {
+export const getCartById = async (cartId) => {
   try {
-    const cart = CartManager.getOneCart(cartId);
+    const cart = await CartManager.getOneCart(cartId);
     return cart;
   } catch (error) {
     return error.message;
   }
 };
 
-export const addProduct = (cartId, productId) => {
+export const addProduct = async (cartId, productId) => {
   try {
-    const productAdded = CartManager.addOneProduct(cartId, productId);
+    const productAdded = await CartManager.addOneProduct(cartId, productId);
     return productAdded;
   } catch (error) {
     return error.message;
   }
 };
 
-export const deleteCart = (cartId) => {
+export const deleteCart = async (cartId) => {
   try {
-    const deletedCart = CartManager.deleteOneCart(cartId);
+    const deletedCart = await CartManager.deleteOneCart(cartId);
     return deletedCart;
   } catch (error) {
     return error.message;
   }
 };
 
-export const cartPurchase = (cartId) => {
+export const cartPurchase = async (cartId) => {
   try {
-    let purchasedCart = CartManager.purchaseCart(cartId);
+    let purchasedCart = await CartManager.purchaseCart(cartId);
     return purchasedCart;
   } catch (error) {
     return error.message;
