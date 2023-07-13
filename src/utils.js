@@ -9,6 +9,27 @@ import multer from "multer";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export { __dirname };
 
+/*
+const validFields = (body) => {
+  const { first_name, last_name, email, password, avatar } = body;
+  if (!first_name || !last_name || !email || !password || !avatar) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+// Filtro para validar los campos antes de cargar la imagen
+const multerFilterProfile = (req, file, cb) => {
+  const isValid = validFields(req.body);
+  if (!isValid) {
+    cb(null, false);
+  } else {
+    cb(null, true);
+  }
+};
+*/
+
 export const createHash = (password) => {
   return bcrypt.hashSync(password, bcrypt.genSaltSync());
 };
@@ -61,7 +82,9 @@ const profileStorage = multer.diskStorage({
 });
 
 // Creamos el uploader de Multer
-export const uploaderProfile = multer({ storage: profileStorage });
+export const uploaderProfile = multer({
+  storage: profileStorage,
+});
 
 // configuración para guardar los documentos del usuario
 const documentStorage = multer.diskStorage({
@@ -92,3 +115,6 @@ const productStorage = multer.diskStorage({
 
 // Creamos el uploader de Multer
 export const uploaderProduct = multer({ storage: productStorage });
+
+// Ejemplo de como utilizar los uploader
+//router.post("/user", uploaderProfile.single("avatar"), (req, res) => {});

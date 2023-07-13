@@ -78,3 +78,22 @@ export const getUserRole = async (req, res) => {
     //res.json({ status: "error", message: "Error trying to change user role" });
   }
 };
+
+export const uploadFile = async (req, res) => {
+  try {
+    const userId = req.params.uid;
+    const user = await UserModel.findById(userId);
+    if (user) {
+      const docs = req.files.map((doc) => ({
+        name: doc.originalname,
+        reference: doc.filename,
+      }));
+      user.documents = docs;
+      user.status = "completo";
+      const userUpdated = await UserModel.findByIdAndUpdate(userId, user);
+      res.json({ status: "success", message: "Documents updated" });
+    } else {
+      res.json({ status: "error", message: "User doesn't exist" });
+    }
+  } catch (error) {}
+};

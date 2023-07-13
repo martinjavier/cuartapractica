@@ -14,12 +14,18 @@ import {
   forgotController,
   resetController,
 } from "../controllers/auth.controller.js";
+import { uploaderProfile } from "../utils.js";
 
 const authRouter = Router();
 
 // Rutas de Autenticación
 
-authRouter.post("/signup", signupController, redirectController);
+authRouter.post(
+  "/signup",
+  uploaderProfile.single("avatar"),
+  signupController,
+  redirectController
+);
 
 authRouter.get("/failure-signup", failSignup);
 

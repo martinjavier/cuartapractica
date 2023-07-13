@@ -6,8 +6,11 @@ import {
   updateUserController,
   deleteUserController,
   premiumUserController,
+  uploadFileController,
 } from "../controllers/users.controller.js";
 import { checkRole } from "../middlewares/auth.js";
+import { isUserAuthenticate } from "../middlewares/validations.js";
+import { uploaderDocument } from "../utils.js";
 
 const usersRouter = Router();
 
@@ -17,5 +20,10 @@ usersRouter.post("/", createUserController);
 usersRouter.put("/:uid", updateUserController);
 usersRouter.delete("/:uid", deleteUserController);
 usersRouter.put("/premium/:uid", checkRole(["admin"]), premiumUserController);
+usersRouter.put(
+  "/:uid/documents",
+  uploaderDocument.array("document"),
+  uploadFileController
+);
 
 export default usersRouter;

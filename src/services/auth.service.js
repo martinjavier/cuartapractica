@@ -25,6 +25,7 @@ export const signup = async (req, res) => {
         password: createHash(password),
         role,
         cart: await createCart(),
+        avatar: req.file.filename,
       };
       const userCreated = await UserManager.addUser(newUser);
       return userCreated;
@@ -33,7 +34,8 @@ export const signup = async (req, res) => {
       res.redirect("/login");
     }
   } catch (error) {
-    res.json({ stats: "error", message: error.message });
+    //res.json({ stats: "error", message: error.message });
+    console.log(error.message);
   }
 };
 
@@ -53,6 +55,7 @@ export const login = async (req, res) => {
             age: user.age,
             role: user.role,
             cart: user.cart,
+            avatar: user.avatar,
           },
           options.server.secretToken,
           { expiresIn: "24h" }

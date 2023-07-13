@@ -6,6 +6,7 @@ import {
   deleteUser,
   premiumUser,
   getUserRole,
+  uploadFile,
 } from "../services/user.service.js";
 import { createCart } from "../services/cart.service.js";
 import { UserModel } from "../dao/factory.js";
@@ -82,5 +83,14 @@ export const getUserRoleController = (req, res) => {
     res.json({ status: "success", data: result });
   } catch (error) {
     res.json({ status: "error", message: error.message });
+  }
+};
+
+export const uploadFileController = async (req, res) => {
+  try {
+    const result = uploadFile(req, res);
+  } catch (error) {
+    console.log(error.message);
+    res.json({ status: "error", message: "Error trying to upload a document" });
   }
 };

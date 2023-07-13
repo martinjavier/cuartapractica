@@ -11,6 +11,8 @@ import {
   reset,
 } from "../services/auth.service.js";
 import { isValidPassword, createHash } from "../utils.js";
+import { isUserAuthenticate } from "../middlewares/validations.js";
+import { UserModel } from "../dao/factory.js";
 
 const authRouter = Router();
 

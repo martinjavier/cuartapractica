@@ -54,6 +54,10 @@ const userSchema = new mongoose.Schema({
     enums: ["completo", "incompleto", "pendiente"],
     default: "pendiente",
   },
+  avatar: {
+    type: String,
+    default: "",
+  },
 });
 
 let userModel = mongoose.model(userCollection, userSchema);
