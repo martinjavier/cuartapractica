@@ -55,7 +55,11 @@ class UserManager {
 
   async updateUser(userId, user) {
     try {
-      const data = await this.model.updateUser({ _id: userId, user: user });
+      const filter = { _id: userId };
+      const data = await this.model.findOneAndUpdate({
+        filter,
+        user: user,
+      });
       const response = JSON.parse(JSON.stringify(data));
       return response;
     } catch (error) {

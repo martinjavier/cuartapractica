@@ -1,6 +1,7 @@
 import { UserManager, UserModel } from "../dao/factory.js";
 import alert from "alert";
 import jwt from "jsonwebtoken";
+import passport from "passport";
 import { options } from "../config/options.js";
 import { isValidPassword, createHash, verifyEmailToken } from "../utils.js";
 import { sendRecoveryPass } from "../utils/email.js";
@@ -27,25 +28,6 @@ export const signup = async (req, res) => {
       };
       const userCreated = await UserManager.addUser(newUser);
       return userCreated;
-      /*
-      const token = jwt.sign(
-        {
-          _id: userCreated._id,
-          first_name: userCreated.first_name,
-          last_name: userCreated.last_name,
-          email: userCreated.email,
-          role: userCreated.role,
-          cart: userCreated.cart,
-        },
-        options.server.secretToken,
-        { expiresIn: "24h" }
-      );
-      res
-        .cookie(options.server.cookieToken, token, {
-          httpOnly: true,
-        })
-        .redirect("/productos");
-        */
     } else {
       alert("User was already registered");
       res.redirect("/login");
@@ -68,16 +50,19 @@ export const login = async (req, res) => {
             first_name: user.first_name,
             last_name: user.last_name,
             email: user.email,
+            age: user.age,
             role: user.role,
+            cart: user.cart,
           },
           options.server.secretToken,
-          { expiresIn: "1d" }
+          { expiresIn: "24h" }
         );
-        res
-          .cookie(options.server.cookieToken, token, {
-            httpOnly: true,
-          })
-          .redirect("/products");
+        res.cookie(options.server.cookieToken, token, {
+          httpOnly: true,
+        });
+        user.last_connection = new Date();
+        const updateUser = await UserModel.findByIdAndUpdate(user._id, user);
+        res.redirect("/products");
       } else {
         alert("Wrong Credentials");
         res.redirect("/login");
@@ -88,6 +73,25 @@ export const login = async (req, res) => {
     }
   } catch (error) {
     res.json({ stats: "errorLogin", message: error.message });
+  }
+};
+
+export const logout = async (req, res) => {
+  try {
+    let token = req.cookies[options.server.cookieToken];
+    passport.authenticate("jwt", { session: false });
+    const info = jwt.verify(token, options.server.secretToken);
+    console.log("Email: " + JSON.stringify(info.email));
+    const email = info.email;
+    const user = await UserManager.getUserByEmail(email);
+    if (user) {
+      user.last_connection = new Date();
+      const updateUser = await UserModel.findByIdAndUpdate(user._id, user);
+    } else {
+      console.log("No se encontró el usuario");
+    }
+  } catch (error) {
+    res.json({ stats: "errorLogout", message: error.message });
   }
 };
 

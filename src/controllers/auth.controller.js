@@ -3,7 +3,13 @@ import passport from "passport";
 import alert from "alert";
 import jwt from "jsonwebtoken";
 import { options } from "../config/options.js";
-import { signup, login, forgot, reset } from "../services/auth.service.js";
+import {
+  signup,
+  login,
+  logout,
+  forgot,
+  reset,
+} from "../services/auth.service.js";
 import { isValidPassword, createHash } from "../utils.js";
 
 const authRouter = Router();
@@ -32,7 +38,7 @@ export const failLogin = (req, res) => {
 };
 
 export const logoutController = (req, res) => {
-  req.logout();
+  const result = logout(req, res);
   res.clearCookie(options.server.cookieToken).redirect("/login");
 };
 

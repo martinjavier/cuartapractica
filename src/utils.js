@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { fileURLToPath } from "url";
 import { faker } from "@faker-js/faker";
 import { options } from "./config/options.js";
+import multer from "multer";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export { __dirname };
@@ -47,5 +48,47 @@ export const verifyEmailToken = (token) => {
   }
 };
 
-//const product = generateProduct();
-//console.log(product);
+// configuración para guardar imágenes de usuarios
+const profileStorage = multer.diskStorage({
+  // Donde voy a guardar los archivos
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "/multer/users/images"));
+  },
+  // Que nombre tendrá el archivo que guardaremos
+  filename: function (req, file, cb) {
+    cb(null, `${req.body.email}-profile-${file.originalname}`);
+  },
+});
+
+// Creamos el uploader de Multer
+export const uploaderProfile = multer({ storage: profileStorage });
+
+// configuración para guardar los documentos del usuario
+const documentStorage = multer.diskStorage({
+  // Donde voy a guardar los archivos
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "/multer/users/documents"));
+  },
+  // Que nombre tendrá el archivo que guardaremos
+  filename: function (req, file, cb) {
+    cb(null, `${req.body.email}-document-${file.originalname}`);
+  },
+});
+
+// Creamos el uploader de Multer
+export const uploaderDocument = multer({ storage: documentStorage });
+
+// configuración para guardar los productos del usuario
+const productStorage = multer.diskStorage({
+  // Donde voy a guardar los archivos
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "/multer/products/images"));
+  },
+  // Que nombre tendrá el archivo que guardaremos
+  filename: function (req, file, cb) {
+    cb(null, `${req.body.code}-image-${file.originalname}`);
+  },
+});
+
+// Creamos el uploader de Multer
+export const uploaderProduct = multer({ storage: productStorage });
