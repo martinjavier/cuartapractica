@@ -2,3 +2,6 @@ node_modules
 .DS_Store
 .env
 ./logs/errores.log
+multer/products
+multer/users/documents
+multer/images

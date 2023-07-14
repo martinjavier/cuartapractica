@@ -51,12 +51,14 @@ export const premiumUser = async (req, res) => {
     // Verifico si el usuario existe en la base de datos
     const user = await UserModel.findById(userId);
     const userRole = user.role;
-    if (userRole == "user") {
-      user.role = "premium";
-    } else if (userRole === "premium") {
-      user.role = "user";
+    // Validamos si el usuario ya subió todos los documentos, entonces puede ser premium
+    if (user.documents.length < 3 && user.status !== "completo") {
+      return res.json({
+        status: "error",
+        message: "User has not upload all documents yet",
+      });
     } else {
-      return res.json({ status: "error", message: "Can not change user role" });
+      user.role = "premium";
     }
     await UserModel.updateOne({ _id: user.id }, user);
     return "User role was modified";
@@ -84,12 +86,32 @@ export const uploadFile = async (req, res) => {
     const userId = req.params.uid;
     const user = await UserModel.findById(userId);
     if (user) {
-      const docs = req.files.map((doc) => ({
-        name: doc.originalname,
-        reference: doc.filename,
-      }));
+      console.log(req.files);
+      const identificacion = req.files["identificacion"]?.[0] || null;
+      const domicilio = req.files["domicilio"]?.[0] || null;
+      const estadoDeCuenta = req.files["estadoDeCuenta"]?.[0] || null;
+      const docs = [];
+      if (identificacion) {
+        docs.push({
+          name: "identificacion",
+          reference: identificacion.filename,
+        });
+      }
+      if (domicilio) {
+        docs.push({ name: "domicilio", reference: domicilio.filename });
+      }
+      if (estadoDeCuenta) {
+        docs.push({
+          name: "estadoDeCuenta",
+          reference: estadoDeCuenta.filename,
+        });
+      }
+      if (docs.length === 3) {
+        user.status = "completo";
+      } else {
+        user.status = "incompleto";
+      }
       user.documents = docs;
-      user.status = "completo";
       const userUpdated = await UserModel.findByIdAndUpdate(userId, user);
       res.json({ status: "success", message: "Documents updated" });
     } else {

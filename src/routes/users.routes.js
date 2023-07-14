@@ -22,7 +22,11 @@ usersRouter.delete("/:uid", deleteUserController);
 usersRouter.put("/premium/:uid", checkRole(["admin"]), premiumUserController);
 usersRouter.put(
   "/:uid/documents",
-  uploaderDocument.array("document"),
+  uploaderDocument.fields([
+    { name: "identificacion", maxCount: 1 },
+    { name: "domicilio", maxCount: 1 },
+    { name: "estadoDeCuenta", maxCount: 1 },
+  ]),
   uploadFileController
 );
 
