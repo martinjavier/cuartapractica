@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 import { faker } from "@faker-js/faker";
 import { options } from "./config/options.js";
 import multer from "multer";
+import passport from "passport";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export { __dirname };
@@ -94,7 +95,11 @@ const documentStorage = multer.diskStorage({
   },
   // Que nombre tendrá el archivo que guardaremos
   filename: function (req, file, cb) {
-    cb(null, `${req.body.email}-document-${file.originalname}`);
+    let token = req.cookies[options.server.cookieToken];
+    passport.authenticate("jwt", { session: false });
+    const info = jwt.verify(token, options.server.secretToken);
+    const email = info.email;
+    cb(null, `${email}-document-${file.originalname}`);
   },
 });
 

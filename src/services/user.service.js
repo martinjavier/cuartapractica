@@ -95,5 +95,8 @@ export const uploadFile = async (req, res) => {
     } else {
       res.json({ status: "error", message: "User doesn't exist" });
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error.message);
+    res.json({ status: "error", message: "Error uploading files" });
+  }
 };

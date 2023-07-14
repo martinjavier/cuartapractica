@@ -84,7 +84,6 @@ export const logout = async (req, res) => {
     let token = req.cookies[options.server.cookieToken];
     passport.authenticate("jwt", { session: false });
     const info = jwt.verify(token, options.server.secretToken);
-    console.log("Email: " + JSON.stringify(info.email));
     const email = info.email;
     const user = await UserManager.getUserByEmail(email);
     if (user) {
