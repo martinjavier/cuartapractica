@@ -26,7 +26,7 @@ export const redirectController = async (req, res) => {
 
 export const signupController = async (req, res) => {
   const result = signup(req, res);
-  res.json({ status: "success", data: result });
+  res.redirect("/login");
 };
 
 export const failSignup = (req, res) => {

@@ -1,6 +1,6 @@
 <h2>REGISTER</h2>
 
-<form method="post" action="api/sessions/signup">
+<form method="post" action="api/sessions/signup" enctype="multipart/form-data">
 
   <label for="firstname">First Name</label>
   <input
@@ -40,6 +40,8 @@
     name="password"
     style="font-size:18pt;"
   />
+  <br />
+
   <label for="avatar">Avatar</label>
   <input
     type="file"
