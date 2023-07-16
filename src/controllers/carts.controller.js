@@ -54,8 +54,12 @@ export const addProductController = async (req, res) => {
   try {
     const cartId = req.params.cid;
     const prodId = req.params.pid;
+    console.log("---------------");
+    console.log("cartId: " + cartId);
+    console.log("prodId: " + prodId);
+    console.log("---------------");
     const product = await getProductById(prodId);
-    console.log("PRODUCT OWNER: " + JSON.stringify(product.owner));
+    //console.log("PRODUCT OWNER: " + JSON.stringify(product.owner));
     const productOwnerId = JSON.stringify(product.owner);
     let token = req.cookies[options.server.cookieToken];
     passport.authenticate("jwt", { session: false });
@@ -65,8 +69,8 @@ export const addProductController = async (req, res) => {
     let result = null;
 
     console.log("USER ROLE: " + userRole);
-    console.log("USER ID: " + userId);
-    console.log("Prod Owner ID: " + productOwnerId);
+    // console.log("USER ID: " + userId);
+    // console.log("Prod Owner ID: " + productOwnerId);
 
     if (userRole === "premium") {
       if (userId != productOwnerId) {

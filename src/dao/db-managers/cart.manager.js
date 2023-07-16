@@ -23,9 +23,14 @@ class CartManager {
   // POSTMAN PUT http://localhost:8080/api/carts/642c94072f2ec4bf4a7b4923/product/642c517ccbcc6f6acabf0a54
   addOneProduct = async (cartId, productId) => {
     console.log("Estoy en ADD ONE PRODUCT en CART MANAGER");
+    console.log("------xxx---------");
+    console.log("cartId: " + cartId);
+    console.log("prodId: " + productId);
+    console.log("------xxx--------");
     const cart = await this.model.findById(cartId);
-    const verifyProduct = cart.products.findById(productId);
+    const verifyProduct = await cart.products.findById(productId);
     console.log("Existe Producto en Carrito: " + verifyProduct);
+    console.log("Cantidad: " + cart.products.quantity);
     cart.products.push(productId);
     await cart.save();
     return cart;
