@@ -27,12 +27,8 @@ export const getCartById = async (cartId) => {
   }
 };
 
-export const addProduct = async (cartId, productId) => {
+export const addJustOneProduct = async (cartId, productId) => {
   try {
-    console.log("------OOO---------");
-    console.log("cartId: " + cartId);
-    console.log("prodId: " + productId);
-    console.log("------OOO--------");
     const productAdded = await CartManager.addOneProduct(cartId, productId);
     return productAdded;
   } catch (error) {

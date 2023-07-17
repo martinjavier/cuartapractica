@@ -7,7 +7,7 @@ import {
   createCart,
   getCarts,
   getCartById,
-  addProduct,
+  addJustOneProduct,
   deleteCart,
   cartPurchase,
 } from "../services/cart.service.js";
@@ -54,13 +54,9 @@ export const addProductController = async (req, res) => {
   try {
     const cartId = req.params.cid;
     const prodId = req.params.pid;
-    console.log("---------------");
-    console.log("cartId: " + cartId);
-    console.log("prodId: " + prodId);
-    console.log("---------------");
     const product = await getProductById(prodId);
-    //console.log("PRODUCT OWNER: " + JSON.stringify(product.owner));
     const productOwnerId = JSON.stringify(product.owner);
+
     let token = req.cookies[options.server.cookieToken];
     passport.authenticate("jwt", { session: false });
     const info = jwt.verify(token, options.server.secretToken);
@@ -68,19 +64,20 @@ export const addProductController = async (req, res) => {
     const userId = JSON.stringify(info._id);
     let result = null;
 
-    console.log("USER ROLE: " + userRole);
-    // console.log("USER ID: " + userId);
-    // console.log("Prod Owner ID: " + productOwnerId);
-
-    if (userRole === "premium") {
+    if (info.role == "premium") {
       if (userId != productOwnerId) {
-        result = await addProduct(cartId, prodId);
+        result = await addJustOneProduct(cartId, prodId);
       } else {
         result = "Premium user can not add an own product to the Cart";
       }
+    } else if (info.role == "admin") {
+      result = await addJustOneProduct(cartId, prodId);
+    } else {
+      result = "Ni PREMIUM ni admin";
     }
     res.json({ status: "success", payload: result });
   } catch (error) {
+    console.log(error.message);
     res.json({ status: "error", message: error.message });
   }
 };

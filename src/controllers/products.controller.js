@@ -56,7 +56,8 @@ export const createProductController = async (req, res) => {
       userId = info._id;
     }
     let product = req.body;
-    product.owner = userId;
+    console.log("Info en REQ BODY OWNER: " + JSON.stringify(product.owner));
+    //product.owner = userId;
     const productCreated = await createProduct(product);
     res.json({ status: "success", payload: productCreated });
   } catch (error) {
